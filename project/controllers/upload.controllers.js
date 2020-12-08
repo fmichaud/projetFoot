@@ -20,15 +20,16 @@ const uploadFiles = async (req, res) => {
       return res.send(`You must select a file.`)
     }
     Image.create({
-      type: req.file.mimetype,
-      name: req.file.originalname,
-      data: fs.readFileSync(
+      id: uuid.v4(),
+      title: req.file.originalname,
+      description: req.file.originalname,
+      images: fs.readFileSync(
         '/tmp' + req.file.filename
       ),
     }).then((image) => {
       fs.writeFileSync(
-        '/tmp' + image.name,
-        image.data,
+        '/tmp' + image.title,
+        image.images,
       )
 
       return res.send(`File has been uploaded.`)

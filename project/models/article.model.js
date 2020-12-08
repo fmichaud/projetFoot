@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BLOB(),
       primaryKey: true,
     },
-    name: {
+    title: {
       type: DataTypes.STRING,
     },
     images: {
