@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const connection = mysql.createConnection({
-  host: 'localhost',
+  host: 'foot-db',
   user: 'root',
   password: 'password',
   database: 'footDb',

@@ -7,9 +7,11 @@ const jwt = require('jsonwebtoken');
 
 const db = require('../config/db.config.js');
 
-const userMiddleware = require('../middleware/users.js');
+const { UploadController } = require("../controllers");
+const { UploadMiddleware, UsersMiddleware } = require("../middleware");
 
-router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
+
+router.post('/sign-upgit ', UsersMiddleware.validateRegister, (req, res, next) => {
     db.query(
         `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(req.body.username)});`,
         (err, result) => {
@@ -99,7 +101,7 @@ router.post('/login', (req, res, next) => {
     );
 });
 
-router.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
+router.get('/secret-route', UsersMiddleware.isLoggedIn, (req, res, next) => {
     console.log(req.userData);
     res.send('This is the secret content. Only logged in users can see that!');
 });
@@ -115,7 +117,7 @@ router.get('/article', (req, res) => {
         })
 });
 
-router.post('/articleAdd', userMiddleware.validateAdd, (req, res, next) => {
+router.post('/articleAdd', UsersMiddleware.validateAdd, (req, res, next) => {
     db.query(
         `INSERT INTO article (id, title, images, description) VALUES ('${uuid.v4()}',${db.escape(req.body.title)} ,${db.escape(req.body.images)}, ${db.escape(req.body.description)});`,
         (err, result) => {
@@ -143,7 +145,7 @@ router.get('/product', (req, res) => {
         })
 });
 
-router.post('/productAdd', userMiddleware.validateAddProduct, (req, res, next) => {
+router.post('/productAdd', UsersMiddleware.validateAddProduct, (req, res, next) => {
     db.query(
         `INSERT INTO product (id, nomproduit, prix, image, descriptions) VALUES ('${uuid.v4()}', ${db.escape(req.body.nomproduit)}, ${db.escape(req.body.prix)}, ${db.escape(req.body.image)}, ${db.escape(req.body.descriptions)});`,
         (err, result) => {
@@ -159,5 +161,10 @@ router.post('/productAdd', userMiddleware.validateAddProduct, (req, res, next) =
         }
     );
 });
+
+/**
+ * Route: upload an image.
+ */
+router.post('/upload', UploadMiddleware.single('file'), UploadController.uploadFiles)
 
 module.exports = router;
