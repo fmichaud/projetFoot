@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  # The backend application
+  foot-backend:
+    image: node:15.3-alpine
+    depends_on:
+      - foot-db
+    ports:
+      - 8000:8000
+    volumes:
+      - ./project:/app:rw
+    command: ['node', '/app/index.js']
+
+  # The database
+  foot-db:
+    image: mariadb:10.5
+    volumes:
+      - ./.data/var/lib/mysql:/var/lib/mysql:rw
+      - ./project/db/:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: footDb
+      MYSQL_INITDB_SKIP_TZINFO: 1
