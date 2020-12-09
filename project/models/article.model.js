@@ -3,9 +3,9 @@
  */
 
 module.exports = (sequelize, DataTypes) => {
-  const Image = sequelize.define('image', {
+  const Article = sequelize.define('article', {
     id: {
-      type: DataTypes.BLOB(),
+      type: DataTypes.STRING.BINARY,
       primaryKey: true,
     },
     title: {
@@ -19,5 +19,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   })
 
-  return Image
+  return Article
 }

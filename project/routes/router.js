@@ -1,3 +1,4 @@
+const bunyan = require('bunyan')
 const express = require('express');
 const router = express.Router();
 
@@ -6,9 +7,17 @@ const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 
 const db = require('../config/db.config.js');
+const multer = require('multer')
+const HomeController = require('../controllers/home.controllers')
 
 const { UploadController } = require("../controllers");
 const { UploadMiddleware, UsersMiddleware } = require("../middleware");
+
+/**
+ * The logger.
+ * @type {Logger}
+ */
+const LOG = bunyan.createLogger({name: __filename})
 
 
 router.post('/sign-upgit ', UsersMiddleware.validateRegister, (req, res, next) => {
@@ -162,9 +171,21 @@ router.post('/productAdd', UsersMiddleware.validateAddProduct, (req, res, next) 
     );
 });
 
+
+
 /**
  * Route: upload an image.
  */
-router.post('/upload', UploadMiddleware.single('file'), UploadController.uploadFiles)
+/*router.post('/upload', upload.single('image'), async (req, res) => {
+  try {
+    LOG.info(req.image)
+    res.send({});
+  } catch (err) {
+    res.sendStatus(400);
+  }
+})*/
+router.post("/upload", UploadMiddleware.single("file"), UploadController.uploadFiles);
+
+router.get("/", HomeController.getHome);
 
 module.exports = router;

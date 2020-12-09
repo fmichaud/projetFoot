@@ -5,6 +5,7 @@
 
 const bunyan = require('bunyan')
 const multer = require('multer')
+const uuid = require('uuid')
 
 
 /** The logger.
@@ -22,9 +23,7 @@ const LOG = bunyan.createLogger({name: __filename})
  */
 const imageFilter = (req, file, cb) => {
   LOG.debug('Image filter', {file: file})
-  if (
-    file.mimetype.startsWith('image')
-  ) {
+  if (file.mimetype.startsWith('image')) {
     cb(null, true);
   } else {
     cb('Please upload only image file.', false)
@@ -41,6 +40,7 @@ const storage = multer.diskStorage({
     cb(null, '/tmp/')
   },
   filename: (req, file, cb) => {
+    LOG.info('Filename', {request: file})
     const dest = `${uuid.v4()}-${file.originalname}`
     LOG.debug(`Store to disk`, {src: file.originalname, dest: dest})
     cb(null, dest)

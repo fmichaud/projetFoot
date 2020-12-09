@@ -19,6 +19,7 @@ const db = {}
 db.Sequelize = Sequelize
 db.sequelize = sequelize
 
-db.Article = require('./article.model.js')(sequelize, Sequelize)
+db.Article = require('./article.model')(sequelize, Sequelize)
+db.Image = require('./image.model')(sequelize, Sequelize)
 
 module.exports = db
